@@ -1,0 +1,52 @@
+<div class="table">
+  <button (click)="exportCsv()">Export CSV</button>
+  <table #table>
+    <tr>
+      <th (click)="sortTable('rank')"
+          [ngClass]="{'cell--active': isCurrentColumn('rank')}"
+          class="cell--{{getSortStrategy()}}  cell--sort"
+      >
+        <span>Rank</span>
+      </th>
+      <th (click)="sortTable('name')"
+          [ngClass]="{'cell--active': isCurrentColumn('name')}"
+          class="cell--{{getSortStrategy()}} cell--sort"
+      >
+        <span>Name</span>
+      </th>
+      <th>BTS Price</th>
+      <th>Change</th>
+      <th>Price</th>
+      <th>Symbol</th>
+      <th>Tier</th>
+      <th></th>
+    </tr>
+    <tr *ngFor="let coin of coins">
+      <td>{{coin.rank}}</td>
+      <td>
+        <div class="coin_name">
+          <img class="coin_img" src="{{coin.iconUrl}}" alt="{{coin.name}}">
+          {{coin.name}}
+        </div>
+      </td>
+      <td>{{coin.btcPrice}}</td>
+      <td>{{(+coin.change).toFixed(2)}}</td>
+      <td>{{coin.price}}</td>
+      <td>{{coin.symbol}}</td>
+      <td>{{coin.tier}}</td>
+      <td>
+        <button (click)="removeCoin(coin.uuid)">
+          <span>Remove</span>
+        </button>
+        <button (click)="showHistory(coin)">
+          <span>Show History</span>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td *ngIf="!coins.length" colspan="8">No results</td>
+    </tr>
+  </table>
+  <app-loader [local]="true" [showLoader]="showLoader"></app-loader>
+</div>
+

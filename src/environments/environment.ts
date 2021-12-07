@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  url: 'https://xaoss-cors-any.herokuapp.com/https://api.coinranking.com/v2'
 };
 
 /*

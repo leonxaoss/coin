@@ -1,0 +1,17 @@
+.nav{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.35em;
+  background: #565462;
+  padding-top: 0.8em;
+  color: #fff;
+  &__link{
+    display: block;
+    padding: 0.2em 0.8em;
+    &.active{
+      background: #FFFFFF;
+      color: #565462;
+    }
+  }
+}

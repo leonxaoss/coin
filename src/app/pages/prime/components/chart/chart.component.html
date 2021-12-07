@@ -1,0 +1,10 @@
+<div class="chart">
+  <ng-container *ngIf="!showLoader">
+    <p-chart type="line"
+             [data]="data"
+             height="500px"
+    >
+    </p-chart>
+  </ng-container>
+  <app-loader [local]="true" [showLoader]="showLoader"></app-loader>
+</div>

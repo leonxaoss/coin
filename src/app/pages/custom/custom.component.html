@@ -1,0 +1,26 @@
+<div class="custom">
+  <div>
+    <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="form_box">
+        <label for="select">
+          Select coin
+        </label>
+        <select id="select" formControlName="coin">
+          <option *ngFor="let coin of coinsList"
+                  value="{{coin.uuid}}"
+                  [disabled]="checkOption(coin.uuid)"
+          >{{coin.name}}</option>
+        </select>
+      </div>
+      <div class="form_box">
+        <button class="btn" [disabled]="showTableLoader">
+          Add
+        </button>
+      </div>
+    </form>
+  </div>
+  <app-table [coins]="coins"
+             [showLoader]="showTableLoader"
+             (onRemove)="removeCoin($event)"
+  ></app-table>
+</div>

@@ -1,0 +1,35 @@
+.custom{
+  font-size: 0.5em;
+}
+.form{
+  display: flex;
+  flex-direction: column;
+  width: 6em;
+  padding: 0.5em;
+  label{
+    font-size: 0.5em;
+    display: block;
+  }
+  select{
+    display: block;
+    width: 100%;
+    font-size: 0.5em;
+  }
+}
+.form_box{
+  margin-bottom: 0.3em;
+}
+.btn{
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  font-size: 0.4em;
+}
+.coin_name{
+  display: flex;
+  align-items: center;
+}
+.coin_img{
+  max-width: 1em;
+  margin-right: 0.2em;
+}

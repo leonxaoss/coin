@@ -1,0 +1,73 @@
+.table{
+  position: relative;
+  padding: 0.5em;
+  margin-top: 1em;
+}
+table, tr, th, td{
+  border: 1px solid #565462;
+}
+th, td{
+  padding: 0.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+th {
+  &.cell--sort{
+    cursor: pointer;
+  }
+  &.cell--active{
+    background: #d1d1d1;
+    span{
+      &:before, &:after{
+        opacity: 0.5;
+      }
+    }
+    &.cell--asc{
+      span{
+        &:before{
+          opacity: 1;
+        }
+      }
+    }
+    &.cell--desc{
+      span{
+        &:after{
+          opacity: 1;
+        }
+      }
+    }
+  }
+  span{
+    position: relative;
+    display: inline-block;
+    padding-right: 1.1em;
+    &:before, &:after{
+      position: absolute;
+      right: 0;
+      opacity: 0.2;
+      font-size: 0.8em;
+    }
+    &:before{
+      content: '\25B2';
+      bottom: 40%;
+    }
+    &:after{
+      content: '\25BC';
+      top: 40%;
+    }
+  }
+}
+table{
+  font-size: 0.5em;
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+.coin_name{
+  display: flex;
+  align-items: center;
+}
+.coin_img{
+  max-width: 1em;
+  margin-right: 0.2em;
+}
