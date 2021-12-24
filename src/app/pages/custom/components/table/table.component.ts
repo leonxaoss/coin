@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { CoinInterface } from '../../../../shared/interfaces/coin.interface';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ChartComponent } from '../chart/chart.component';
@@ -10,7 +10,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./table.component.scss'],
   providers: [ DialogService ]
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements OnDestroy {
 
   tableSort = {
     column: '',
@@ -27,11 +27,7 @@ export class TableComponent implements OnInit {
   constructor(public dialogService: DialogService,
               private datePipe: DatePipe) { }
 
-  ngOnInit(): void {
-
-  }
-
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     if (this.refNote) {
       this.refNote.close();
     }
@@ -82,11 +78,11 @@ export class TableComponent implements OnInit {
     this.tableSort.column = columnName;
   }
 
-  isCurrentColumn(columnName: string): boolean {
+  public isCurrentColumn(columnName: string): boolean {
     return this.tableSort.column === columnName;
   }
 
-  getSortStrategy(): string{
+  public getSortStrategy(): string{
     return this.tableSort.isAscSort ? 'asc' : 'desc';
   }
 
@@ -103,7 +99,7 @@ export class TableComponent implements OnInit {
         row.push(cols[j]?.innerText);
       }
 
-      data.push(row.join(","));
+      data.push(row.join(','));
     }
 
     const csv_file = new Blob([data.join('\n')], {type: 'text/csv'});

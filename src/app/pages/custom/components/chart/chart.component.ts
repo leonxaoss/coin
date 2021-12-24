@@ -3,7 +3,10 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { CryptoService } from '../../../../providers/services/crypto.service';
 import { HistoryResponseInterface } from '../../../../shared/interfaces/history-response.interface';
 import { HistoryInterface } from '../../../../shared/interfaces/history.interface';
+import { DataChartInterface } from '../../shared/interfaces/data-chart.interface';
 import * as d3 from 'd3';
+import { Selection } from 'd3-selection';
+import { ScaleTime } from 'd3';
 
 @Component({
   selector: 'app-chart',
@@ -15,14 +18,15 @@ export class ChartComponent implements OnInit {
   private width = 700;
   private height = 700;
   private margin = 50;
+  private defaultColor = '#000000'
 
-  public svg: any;
-  public svgInner: any;
-  public yScale: any;
-  public xScale: any;
-  public xAxis: any;
-  public yAxis: any;
-  public lineGroup: any;
+  public svg: Selection<SVGSVGElement, unknown, HTMLElement, any> | undefined;
+  public svgInner: Selection<SVGGElement, unknown, HTMLElement, any> | undefined;
+  public yScale: ScaleTime<number, number, never> | any;
+  public xScale: ScaleTime<number, number, never> | any;
+  public xAxis: Selection<SVGGElement, unknown, HTMLElement, any> | undefined;
+  public yAxis: Selection<SVGGElement, unknown, HTMLElement, any> | undefined;
+  public lineGroup: Selection<SVGPathElement, unknown, HTMLElement, any> | undefined;
 
   showLoader = true;
 
@@ -45,7 +49,7 @@ export class ChartComponent implements OnInit {
     })
   }
 
-  private mapData(data: HistoryInterface[]): { date: number, value: number }[] {
+  private mapData(data: HistoryInterface[]): DataChartInterface[] {
     return data.map((result: HistoryInterface) => {
       return {
         date: result.timestamp * 1000,
@@ -54,7 +58,7 @@ export class ChartComponent implements OnInit {
     });
   }
 
-  private initializeChart(data: { date: number, value: number }[]): void {
+  private initializeChart(data: DataChartInterface[]): void {
     this.svg = d3
       .select('.chart')
       .append('svg')
@@ -65,7 +69,7 @@ export class ChartComponent implements OnInit {
 
     this.yScale = d3
       .scaleLinear()
-      .domain([d3.max(data, (d: any) => d.value) + 1, d3.min(data, (d: any) => d.value) - 1])
+      .domain([d3.max(data, (d: DataChartInterface) => d.value) as number * 1.015, d3.min(data, (d: DataChartInterface) => d.value) as number * 0.98])
       .range([0, this.height - 2 * this.margin]);
 
     this.yAxis = this.svgInner
@@ -73,8 +77,10 @@ export class ChartComponent implements OnInit {
       .attr('id', 'y-axis')
       .style('transform', 'translate(' + this.margin + 'px,  0)');
 
-    // @ts-ignore
-    this.xScale = d3.scaleTime().domain(d3.extent(data, d => new Date(d.date)));
+    const arr = d3.extent(data, (d: DataChartInterface) => d.date) as number[];
+
+    this.xScale = d3.scaleTime().domain(arr);
+    console.log(this.xScale);
 
     this.xAxis = this.svgInner
       .append('g')
@@ -86,26 +92,26 @@ export class ChartComponent implements OnInit {
       .append('path')
       .attr('id', 'line')
       .style('fill', 'none')
-      .style('stroke', this.config.data.color)
-      .style('stroke-width', '2px')
+      .style('stroke', this.config.data.color ? this.config.data.color : this.defaultColor)
+      .style('stroke-width', '1px')
   }
 
-  private drawChart(data: any): void {
+  private drawChart(data: DataChartInterface[]): void {
     this.width = this.chartElem.nativeElement.getBoundingClientRect().width;
-    this.svg.attr('width', this.width);
+    this.svg?.attr('width', this.width);
 
-    this.xScale.range([this.margin, this.width - 2 * this.margin]);
+    this.xScale?.range([this.margin, this.width - 2 * this.margin]);
 
     const xAxis = d3
       .axisBottom(this.xScale)
       .ticks(10)
 
-    this.xAxis.call(xAxis);
+    this.xAxis?.call(xAxis);
 
     const yAxis = d3
       .axisLeft(this.yScale);
 
-    this.yAxis.call(yAxis);
+    this.yAxis?.call(yAxis);
 
     const line = d3
       .line()
@@ -113,11 +119,11 @@ export class ChartComponent implements OnInit {
       .y(d => d[1])
       .curve(d3.curveMonotoneX);
 
-    const points: [number, number][] = data.map((d: any) => [
+    const points: [number, number][] = data.map((d: DataChartInterface) => [
       this.xScale(new Date(d.date)),
       this.yScale(d.value),
     ]);
 
-    this.lineGroup.attr('d', line(points));
+    this.lineGroup?.attr('d', line(points));
   }
 }
