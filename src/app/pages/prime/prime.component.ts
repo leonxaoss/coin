@@ -61,7 +61,7 @@ export class PrimeComponent implements OnInit {
     this.getCoin(this.form.value.coin);
   }
 
-  loadData(event: LazyLoadEvent): void {
+  public loadData(event: LazyLoadEvent): void {
     this.showTableLoader = true;
     this.updateParams(event, this.params);
     this.getCoins(this.params);
